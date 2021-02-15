@@ -22,14 +22,15 @@ authors and also on their previous work [Lindroos2018].
 
 ## References
 
-[@Lindroos2018]: Lindroos R, Dorst MC, Du K, Filipović M, Keller D,
+[Lindroos2018]: Lindroos R, Dorst MC, Du K, Filipović M, Keller D,
 Ketzef M, Kozlov AK, Kumar A, Lindahl M, Nair AG, Pérez-Fernández J,
 Grillner S, Silberberg G & Hellgren Kotaleski J (2018). Basal ganglia
 neuromodulation over multiple temporal and structural scales-simulations
 of direct pathway MSNs investigate the fast onset of dopaminergic
-effects and predict the role of Kv4.2. Front Neural Circuits 12, 3.
+effects and predict the role of Kv4.2. Front Neural Circuits 12, 3
+(https://doi.org/10.3389/fncir.2018.00003).
 
-[@Lindroos2020]: Lindroos R & Hellgren Kotaleski J (2020). Predicting
+[Lindroos2020]: Lindroos R & Hellgren Kotaleski J (2020). Predicting
 complex spikes in striatal projection neurons of the direct pathway
-following neuromodulation by acetylcholine and dopamine. Eur J Neurosci;
-DOI: 10.1111/ejn.14891.
+following neuromodulation by acetylcholine and dopamine. Eur J Neurosci
+(https://doi.org/10.1111/ejn.14891).
