@@ -1,0 +1,8 @@
+__pycache__
+*.pyc
+*.swp
+.vscode
+x86_64
+
+# Docs builds
+docs/_build/
