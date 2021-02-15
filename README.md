@@ -41,7 +41,7 @@ the documentation in the individual files acknowledges this fact.
 
 ## Links
 
-* The [source code](https://github.com/antgon/msn-model) is in GitHub.
+* The [source code](https://github.com/antgon/msn-model) is on GitHub.
 
 [NEURON]: https://neuron.yale.edu/neuron/
 
