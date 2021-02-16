@@ -384,8 +384,17 @@ class MSN:
         # Make sure to remove previous noise first.
         self.remove_bg_noise()
 
-        # What is gbase? Why these default values? Where do they come
-        # from?
+        # The default synaptic conductance in the synapses that generate
+        # this background noise ("specific pattern" protocol) quoted in
+        # Section 2.6 in Lindroos and Hellgren Kotaleski (2020) are:
+        #
+        # AMPA, 300 pS = 3e-4 uS
+        # NMDA, 300 pS = 3e-4 uS
+        # GABA, 900 pS = 9e-4 uS
+        #
+        # It is not clear there whether these values apply to both dMSN
+        # and iMSN or not but they have separate default values in
+        # their function `set_bg_noise()`:
         if self.type == 'dmsn':
             gbase = 0.3e-3
         elif self.type == 'imsn':
