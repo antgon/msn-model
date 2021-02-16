@@ -18,8 +18,8 @@ h.load_file('import3d.hoc')
 nrn.load_mechanisms(paths['mechanisms'])
 
 
-def synaptic_input(section, stype, x=0.5, interval=10, number=10, start=50,
-                      noise=0, threshold=10, delay=1, weight=0):
+def synaptic_input(section, stype, x=0.5, interval=10, number=10,
+                   start=50, noise=0, threshold=10, delay=1, weight=0):
     """
     Connect a synapse to a cell section and deliver synaptic stimuli.
 
