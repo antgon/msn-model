@@ -385,7 +385,7 @@ class MSN:
         self.remove_bg_noise()
 
         # The default synaptic conductance in the synapses that generate
-        # this background noise ("specific pattern" protocol) quoted in
+        # this background noise ("synaptic bombardment") quoted in
         # Section 2.6 in Lindroos and Hellgren Kotaleski (2020) are:
         #
         # AMPA, 300 pS = 3e-4 uS
