@@ -3,21 +3,17 @@ Single synaptic input.
 
 This script illustrates how to create a synapse and connect it to one
 single dendritic section. This synapse then delivers a train of
-excitatory inputs and the voltage (i.e. the excitatory post-synaptic
-potential) at the soma is recorded.
+excitatory (glutamatergic) inputs and the voltage (i.e. the excitatory
+post-synaptic potential) at the soma is recorded.
 
-Two simulations take place: first, the synapse is connected to a
-dendrite located close to the cell soma. Then, it is connected to
-another dendrite (on the same dendritic branch) far away from the soma.
-The two resulting post-synaptic potentials are plotted together for
-comparison: the one from the distal dendrite should be wider, similar to
-Figure 2(a) and 2(b) in Lindroos and Hellgren Kotaleski (2020).
+Three simulations take place as the synapse is connected to a dendrite
+close to the soma, then to another dendrite further from the soma, and
+finally to a third dendrite even further away. The resulting
+post-synaptic potentials are plotted together for comparison: the
+further from the soma the wider the potential, similar to Figure 2(a)
+and 2(b) in Lindroos and Hellgren Kotaleski (2020).
 
-The easiest way to find which dendrite sections are close or far from
-the soma and to choose those on the same dendritic tree is to run this
-script in an interactive session (e.g. ipython or a Jupyter notebook)
-and, after the cell has been built, type `h.topology()` to get a view of
-how all the cell sections are connected together.
+author: Antonio Gonzalez
 """
 
 import numpy as np
