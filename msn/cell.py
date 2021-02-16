@@ -18,6 +18,88 @@ h.load_file('import3d.hoc')
 nrn.load_mechanisms(paths['mechanisms'])
 
 
+def synaptic_input(section, stype, x=0.5, interval=10, number=10, start=50,
+                      noise=0, threshold=10, delay=1, weight=0):
+    """
+    Connect a synapse to a cell section and deliver synaptic stimuli.
+
+    Parameters
+    ----------
+    section : object
+        The cell section that will receive synaptic input.
+    stype : {'gaba', 'glut'}
+        The type of synapse.
+    x : float, rangeq [0, 1], default=0.5
+        Location on `section` where the synapse will be created.
+    interval : numeric, default=10
+        Mean time between spikes in ms.
+    number : int, default=10
+       Average number of spikes.
+    start : numeric, default=50
+        Start time of first spike in ms.
+    noise : float, range [0, 1], default=0
+        Fractional randomness.
+    threshold : numeric, default=10
+        Connection threshold in mV. If presynaptic variable crosses this
+        threshold, the procedure NET_RECEIVE in the target is called,
+        i.e. the synapse is activated.
+    delay : numeric, default=1
+        Connection delay. Delay (after `start`) of the stimulus in ms.
+        Represents conduction latency + synaptic latency. It should be
+        >= 0.
+    weight : numeric, default=0
+        Connection weight in uS. Passed on to the NET_RECEIVE procedure
+        in the target point.
+
+    Returns
+    -------
+    synapse : object
+        The synapse created
+    stim : object
+        The NetStim object (NEURON's spike generator object)
+    conn : object
+        The NetCon object, connecting `synapse` and `stim` (NEURON's
+        network connection object)
+
+    Notes
+    -----
+    The default values are NEURON's default values for NetStim and
+    NetCon objects.
+
+    Based on the [online
+    tutorial](https://neuron.yale.edu/neuron/docs/ball-and-stick-model-part-2)
+    on NEURON's website and on Chapter 10 in The NEURON Book (esp.
+    Section 10.1.3.2). To understand the function and its parameters it
+    is useful to read the
+    [NetStim](https://neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/mechanisms/mech.html#NetStim)
+    and
+    [NetCon](https://neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/network/netcon.html#NetCon)
+    documentation.
+    """
+    # Create the synapse.
+    if stype == 'glut':
+        synapse = h.glutamate(x, sec=section)
+    elif stype == 'gaba':
+        synapse = h.gaba(x, sec=section)
+    else:
+        raise ValueError("synapse type `stype` must be 'glut' or 'gaba'")
+
+    # Create the stimulus (NetStim - spike generator)
+    stim = h.NetStim()
+    stim.interval = interval
+    stim.number = number
+    stim.start = start
+    stim.noise = noise
+
+    # Connect the stimulus to the synapse (NetCon - connection object)
+    conn = h.NetCon(stim, synapse)
+    conn.threshold = threshold
+    conn.delay = delay
+    conn.weight[0] = weight
+
+    return synapse, stim, conn
+
+
 def uniform_fun(distance, args, gbar):
     p0 = args[0]
     return 10**p0 * gbar
@@ -290,6 +372,10 @@ class MSN:
         Based on the function set_bg_noise() in common_functions.py,
         from Lindroos et al. and available from
         [GitHub](https://github.com/robban80/striatal_SPN_lib).
+
+        The synaptic input parameters not specified in that function
+        are the default parameters in the function random_synapse()
+        found in that same common_functions.py file.
         """
         if dend_only is True:
             sections = [sec for sec in self.all if 'dend' in sec.name()]
@@ -313,11 +399,11 @@ class MSN:
                 delay = delays[indx]
 
             # Glut synapse
-            synapse, netstim, netcon = random_synapse(
-                sec, x=0.5, synapse_type='glut',
-                stim_interval=1000/glut_freq,
-                conn_conductance=gbase, stim_start=delay)
-            synapse.ratio = 1
+            synapse, netstim, netcon = synaptic_input(
+                sec, stype='glut', x=0.5, interval=1000/glut_freq,
+                number=1000, start=delay, noise=1, threshold=0.1,
+                delay=0, weight=gbase)
+            synapse.ratio = 1  # AMPA:NMDA ratio
             if ampa_scale_factor:
                 synapse.ampa_scale_factor = ampa_scale_factor
             if nmda_scale_factor:
@@ -329,11 +415,10 @@ class MSN:
                 conductance = gbase * 3 * gaba_scale_factor  # Why times 3?
             else:
                 conductance = gbase * 5  # Why times 5?
-            synapse, netstim, netcon = random_synapse(
-                sec, x=0.1, synapse_type='gaba',
-                stim_interval=1000/gaba_freq,
-                conn_conductance=conductance,
-                stim_start=delay)
+            synapse, netstim, netcon = synaptic_input(
+                sec, stype='gaba', x=0.1, interval=1000/gaba_freq,
+                number=1000,  start=delay, noise=1, threshold=0.1,
+                delay=0, weight=conductance)
             self._bg_noise.append([synapse, netstim, netcon])
 
     def remove_bg_noise(self):
