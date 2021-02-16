@@ -28,7 +28,7 @@ def synaptic_input(section, stype, x=0.5, interval=10, number=10,
         The cell section that will receive synaptic input.
     stype : {'gaba', 'glut'}
         The type of synapse.
-    x : float, rangeq [0, 1], default=0.5
+    x : float, range [0, 1], default=0.5
         Location on `section` where the synapse will be created.
     interval : numeric, default=10
         Mean time between spikes in ms.
@@ -81,7 +81,7 @@ def synaptic_input(section, stype, x=0.5, interval=10, number=10,
     elif stype == 'gaba':
         synapse = h.gaba(x, sec=section)
     else:
-        raise ValueError("synapse type `stype` must be 'glut' or 'gaba'")
+        raise ValueError("Synapse type `stype` must be 'glut' or 'gaba'")
 
     # Create the stimulus (NetStim - spike generator)
     stim = h.NetStim()
@@ -186,7 +186,7 @@ def get_channel_density(distance, params):
     # case they set the density to 0 instead. I do not know why or when
     # the density may be negative. This assert is to look into this if
     # that ever happened.
-    assert (density >= 0), "Channel distribution is negative"
+    assert (density >= 0), "Ion channel density is negative"
 
     return density
 
