@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 from . import paths
 from .params import ModelParameters
-from .funcs import random_synapse
 
 h.load_file('stdrun.hoc')
 h.load_file('import3d.hoc')
