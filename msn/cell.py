@@ -396,9 +396,9 @@ class MSN:
         # and iMSN or not but they have separate default values in
         # their function `set_bg_noise()`:
         if self.type == 'dmsn':
-            gbase = 0.3e-3
+            gbase = 3e-4  # in uS
         elif self.type == 'imsn':
-            gbase = 0.2e-3
+            gbase = 2e-4  # in uS
 
         for indx, sec in enumerate(sections):
             if len(delays) == 0:
@@ -419,6 +419,10 @@ class MSN:
             self._bg_noise.append([synapse, netstim, netcon])
 
             # GABA synapse
+            # It is not clear why GABA synaptic conductance is
+            # calculated as it is done here. GABA conductance should be
+            # 9e-4 uS according to the Lindroos and Hellgren Kotaleski
+            # paper.
             if gaba_scale_factor:
                 conductance = gbase * 3 * gaba_scale_factor  # Why times 3?
             else:
