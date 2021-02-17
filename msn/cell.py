@@ -264,8 +264,13 @@ class MSN:
         cell.input(self._morphology_file)
         i3d = h.Import3d_GUI(cell, 0)
         i3d.instantiate(self)
-        # h.define_shape() # Is this needed? This line is in the original
-        # Lindroos MSN but I am not sure what it does.
+        # h.define_shape() # Is this needed? This line is in the
+        # original Lindroos MSN class but I am not sure it is required.
+        # NEURON's documentation suggests this is used when cell
+        # geometry is specified by methods "where 3D shape is
+        # irrelevant", not when using 3D reconstruciton data as it is
+        # done here; see
+        # https://www.neuron.yale.edu/neuron/static/py_doc/modelspec/programmatic/topology/geometry.html#geometry-geometry
 
         # There should only be one soma
         assert(len(self.soma) == 1)
