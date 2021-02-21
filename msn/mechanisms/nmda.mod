@@ -1,10 +1,10 @@
 TITLE NMDA synapse
 
 COMMENT
-This mechanism is based on Examples 10.3 to 10.5 in The NEURON Book
-with additions and parameters from Lindross's `gluatamte.mod`
-(ModelDB #266775). These additions include Mg++ block and the
-`modulation()` function for modelling DA and Ach modulation.
+Based on Examples 10.3 to 10.5 in The NEURON Book with parameters and 
+additions from Lindross's `gluatamte.mod` (ModelDB #266775). These
+additions include Mg++ block and the `modulation()` function for
+modelling DA and Ach modulation.
 
 This mechanism contributes (with AMPA) to ical.
 
@@ -41,7 +41,8 @@ PARAMETER {
     lev2 = 0
     scale_factor = 1 : Scales the total current.
 
-    ca_ratio = 0.1 : Fraction of current across NMDA that is carried by Ca++.
+    ca_frac = 0.1 : Fraction of current across NMDA that is carried by
+                  : Ca++.
 }
 
 ASSIGNED {
@@ -71,8 +72,8 @@ BREAKPOINT {
     SOLVE states METHOD cnexp
 	g = (b - a) * modulation()
 	itotal = g * (v - e) * mgblock(v) * scale_factor
-    ical = itotal * ca_ratio
-    i = itotal * (1 - ca_ratio)
+    ical = itotal * ca_frac
+    i = itotal * (1 - ca_frac)
 }
 
 DERIVATIVE states {

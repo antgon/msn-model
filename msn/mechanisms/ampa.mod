@@ -1,10 +1,10 @@
 TITLE AMPA synapse
 
 COMMENT
-This mechanism is based on Examples 10.3 to 10.5 in The NEURON Book
-with additions and parameters from Lindross's `gluatamte.mod`
-(ModelDB #266775). These additions include the `modulation()` function
-for modelling DA and Ach modulation.
+Based on Examples 10.3 to 10.5 in The NEURON Book with parameters and
+additions from Lindross's `gluatamte.mod` (ModelDB #266775). These 
+additions include the `modulation()` function for modelling DA and
+Ach modulation.
 
 This mechanism contributes (with NMDA) to ical.
 
@@ -51,11 +51,12 @@ PARAMETER {
     lev2 = 0
     scale_factor = 1 : Scales the total current.
 
-    ca_ratio = 0.005 : Fraction of current across AMPA that is carried by Ca++.
+    ca_frac = 0.005 : Fraction of current across AMPA that is carried by
+                    : Ca++.    
     
     ampa_nmda_ratio = 1 : Scales AMPA input strength in relation to NMDA
-                        : (This applies to NET_RECEIVE; `scale_fator`
-                        : above pplies to the current magnitude.)
+                        : (This applies to NET_RECEIVE; `scale_factor`
+                        : above applies to the current magnitude.)
 }
 
 ASSIGNED {
@@ -85,8 +86,8 @@ BREAKPOINT {
     SOLVE states METHOD cnexp
 	g = (b - a) * modulation()
 	itotal = g * (v - e) * scale_factor
-    ical = itotal * ca_ratio
-    i = itotal * (1 - ca_ratio)
+    ical = itotal * ca_frac
+    i = itotal * (1 - ca_frac)
 }
 
 DERIVATIVE states {
