@@ -1,47 +1,54 @@
-TITLE BK-type calcium activated K channel
+TITLE Potassium current, calcium-dependent (BK)
+
+COMMENT
+Based on Section 9.6 in The NEURON Book with parameters taken from the
+Lindroos's original bk.mod mechanism.
+
+This mechanism is not modulated by DA or ACh so lacks that function.
+
+(2020) Antonio Gonzalez
+ENDCOMMENT
+
+NEURON {
+    SUFFIX bk
+    USEION k READ ek WRITE ik
+    USEION ca READ cai
+    RANGE gbar, g, i
+}
 
 UNITS {
-    (molar) = (1/liter)
     (mV) = (millivolt)
     (mA) = (milliamp)
-    (mM) = (millimolar)
+    (S)  = (siemens)
+    (mM) = (milli/liter)
     FARADAY = (faraday) (kilocoulombs)
     R = (k-mole) (joule/degC)
 }
 
-NEURON {
-    SUFFIX bk
-    USEION ca READ cai
-    USEION k READ ek WRITE ik
-    RANGE gbar, ik
-}
-
 PARAMETER {
-    gbar = 0.0 (mho/cm2)
-    k1 = 0.180 (mM)
-    k4 = 0.011 (mM)
+    gbar = 0 (S/cm2)
+    d1 = 0.84
+    d2 = 1
+    k1 = 0.18 (mM)
+    k2 = 0.011 (mM)
+    abar = 0.48 (/ms)
+    bbar = 0.28 (/ms)
 }
 
 ASSIGNED {
     v (mV)
+    ek (mV) 
     ik (mA/cm2)
+    cai (mM)
+    i (mA/cm2)
+    g (S/cm2)
     celsius (degC)
-    cai (mM) 
-    ek (mV)
+    tauo (ms)
     oinf
-    otau (ms)
 }
 
-STATE { o }
-
-BREAKPOINT {
-    SOLVE state METHOD cnexp
-    ik = gbar*o*(v-ek)
-}
-
-DERIVATIVE state {
-    rate(v, cai)
-    o' = (oinf-o)/otau
+STATE {
+    o (1) : Fraction of channels that are open
 }
 
 INITIAL {
@@ -49,27 +56,34 @@ INITIAL {
     o = oinf
 }
 
-PROCEDURE rate(v (mV), ca (mM)) {
-    LOCAL a, b, sum, z
-    UNITSOFF
-    z = 1e-3*2*FARADAY/(R*(celsius+273.15))
-    a = 0.48*ca/(ca+k1*exp(-0.84*z*v))
-    b = 0.28/(1+ca/(k4*exp(-z*v)))
-    sum = a+b
-    oinf = a/sum
-    otau = 1/sum
-    UNITSON
+BREAKPOINT {
+    SOLVE states METHOD cnexp
+    g = gbar * o
+    i = g * (v - ek)
+    ik = i
 }
 
-COMMENT
+DERIVATIVE states {
+    rate(v, cai)
+    o' = (oinf - o) / tauo
+}
 
-Original model by Moczydlowski (1983), rat skeletal muscle.
+FUNCTION alpha(Vm (mV), ca (mM)) (/ms) {
+    alpha = abar * ca/(ca + exp1(k1, d1, Vm))
+}
 
-Genesis implementation by De Schutter, adapted by Kai Du.
+FUNCTION beta(Vm (mV), ca (mM)) (/ms) {
+    beta = bbar / (1 + ca/exp1(k2, d2, Vm))
+}
 
-Revision by Evans (2012, 2013), K1 changed from 0.180 to 0.003 and K4
-from 0.011 to 0.009, according to Berkefeld (2006), Xenopus oocytes.
+FUNCTION exp1(k (mM), d, Vm (mV)) (mM) {
+    exp1 = k * exp(-2e-3 * d * FARADAY * Vm / R / (273.15 + celsius))
+}
 
-NEURON implementation by Alexander Kozlov <akozlov@csc.kth.se>.
-
-ENDCOMMENT
+PROCEDURE rate(Vm (mV), ca (mM)) {
+    LOCAL a, b
+    a = alpha(Vm, ca)
+    b = beta(Vm, ca)
+    tauo = 1/(a + b)
+    oinf = a/(a + b)
+}
