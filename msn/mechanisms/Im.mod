@@ -1,100 +1,126 @@
+TITLE Potassium current, M-type
+
 COMMENT
-Mechanism taken from Doron et al., 2017
-https://senselab.med.yale.edu/ModelDB/ShowModel.cshtml?model=231427&file=/reproduction/Im.mod#tabs-2
+A slow-activating potassium current with no inactivation. After Adams et
+al (1982).
 
-Reference :     Adams et al. 1982 - M-currents and other potassium currents in bullfrog sympathetic neurones
+A similar implentation of this current is that by Doron et al (2017),
+available on ModelDB (#231427). Note, however, that their equations used
+to calculate `alpha` and `beta` differ slightly from Equations 5a and 5b
+in Adams et al.
 
-corrected rates using q10 = 2.3, target temperature 34, orginal 21
+Temperature compensation in this mechanism follows that in Doron's model.
+It also includes a `modulation()` function, from Lindroos and Hellgren
+Kotaleski (2020) (ModelDB #266775), use to simulate dopamine and
+acetylcholine modulation of this mechanism.
 
----------------------------------------------------------------
+References
+----------
+Adams PR, Brown DA & Constanti A (1982). M-currents and other potassium
+currents in bullfrog sympathetic neurones. J Physiol 330: 537-572.
 
-neuromodulation is added as functions:
-    
-    modulation = 1 + damod*(maxMod-1)*level
+Lindroos R & Hellgren Kotaleski J (2020). Predicting complex spikes in
+striatal projection neurons of the direct pathway following
+neuromodulation by acetylcholine and dopamine. Eur J Neurosci
+(https://doi.org/10.1111/ejn.14891).
 
-where:
-    
-    damod  [0]: is a switch for turning modulation on or off {1/0}
-    maxMod [1]: is the maximum modulation for this specific channel (read from the param file)
-                e.g. 10% increase would correspond to a factor of 1.1 (100% +10%) {0-inf}
-    level  [0]: is an additional parameter for scaling modulation. 
-                Can be used simulate non static modulation by gradually changing the value from 0 to 1 {0-1}
 
-[] == default values
-{} == ranges
-    
+(2020) Antonio Gonzalez
 ENDCOMMENT
 
-NEURON	{
-	SUFFIX Im
-	USEION k READ ek WRITE ik
-	RANGE gbar, gIm, ik
+NEURON {
+    SUFFIX Im
+    USEION k READ ek WRITE ik
+    RANGE gbar, g, i
     RANGE damod, maxMod, level, max2, lev2
 }
 
-UNITS	{
-	(S) = (siemens)
-	(mV) = (millivolt)
-	(mA) = (milliamp)
+UNITS {
+    (mV) = (millivolt)
+    (mA) = (milliamp)
+    (S)  = (siemens)
+    : F = (faraday) (kilocoulombs)
+    : R = (k-mole) (joule/degC)
 }
 
-PARAMETER	{
-	gbar = 0.00001 (S/cm2) 
+PARAMETER {
+    gbar = 0.00001 (S/cm2)
     damod = 0
     maxMod = 1
-    level = 0
     max2 = 1
+    level = 0
     lev2 = 0
+    q10 = 2.3  : Temperature sensitivity; from Doron's model.
+    celsius (degC)
+    temp = 22 (degC)  : Original temperature, from Adams et al (1982).
 }
 
-ASSIGNED	{
-	v	(mV)
-	ek	(mV)
-	ik	(mA/cm2)
-	gIm	(S/cm2)
-	mInf
-	mTau
-	mAlpha
-	mBeta
+ASSIGNED {
+    v (mV)
+    ek (mV) 
+    ik (mA/cm2)
+    i (mA/cm2)
+    g (S/cm2)
+    tadj (1)
 }
 
-STATE	{ 
-	m
+STATE {
+    m (1)
 }
 
-BREAKPOINT	{
-	SOLVE states METHOD cnexp
-	gIm = gbar*m*modulation()
-	ik = gIm*(v-ek)
+INITIAL {    
+    tadj = q10^((celsius - temp)/(10(degC)))  : Temperature-adjusting
+                                              : factor. From Doron's model.
+    m = minf(v)
 }
 
-DERIVATIVE states	{
-	rates()
-	m' = (mInf-m)/mTau
+BREAKPOINT {
+    SOLVE states METHOD cnexp
+    g = gbar * m * modulation()
+    i = g * (v - ek)
+    ik = i
 }
 
-INITIAL{
-	rates()
-	m = mInf
+DERIVATIVE states {
+    m' = (minf(v) - m) / taum(v)
 }
 
-PROCEDURE rates(){
-  LOCAL qt
-  qt = 2.3^((34-21)/10)
+FUNCTION minf (Vm (mV)) (1) {
+    : After Equation 2 in Adams et al (1982).
+    : That equation is:
+    : minf = 1/(1 + exp(z * (v0 - Vm) * F/R/T/1000))
+    : where 
+    :   z = 2.5 (1)
+    :   T = 273.15 + 22(celsius)
+    :   v0 = -35 (mV)
+    : In this implementation, I have simplified that equation by
+    : reducing all constants to one number, km. Thus, `km` (below) is
+    : 1/(z*F/R/T/1000) (The 1000 is needed because the voltage here is
+    : in mV instead of V.)
+    LOCAL vm, km
+    vm = -35 (mV)
+    km = 10.17 (mV)
+    minf = 1 / (1 + exp((vm - Vm) / km))
+}
 
-	UNITSOFF
-		mAlpha = 3.3e-3*exp(2.5*0.04*(v - -35))
-		mBeta = 3.3e-3*exp(-2.5*0.04*(v - -35))
-		mInf = mAlpha/(mAlpha + mBeta)
-		mTau = (1/(mAlpha + mBeta))/qt
-	UNITSON
+FUNCTION taum (Vm (mV)) (ms) {
+    : After Equations 4, 5a and 5b in Adams et al (1982).
+    : As with `minf`, I reduced the constants in the original equations
+    : to the parameters `ktau1` and `ktau2`.
+    LOCAL vtau, ktau1, ktau2, a, b
+    vtau = -35 (mV)
+    ktau1 = 20.3 (mV)
+    ktau2 = -20.3 (mV)
+    a = 3.3(/s) * exp((Vm - vtau)/ktau1)
+    b = 3.3(/s) * exp((Vm - vtau)/ktau2)
+    taum = 1/(a + b) * (1000)
 }
 
 FUNCTION modulation() {
-    : returns modulation factor
-    
-    modulation = 1 + damod * ( (maxMod-1)*level + (max2-1)*lev2 ) 
+    modulation = 1 + damod * (
+        (maxMod - 1) * level +
+        (max2 - 1) * lev2)
     if (modulation < 0) {
         modulation = 0
-    } 
+    }    
 }
