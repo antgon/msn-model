@@ -1,8 +1,8 @@
-TITLE Potassium current, M-type
+TITLE Potassium current, M-type (I_K(M))
 
 COMMENT
-A slow-activating potassium current with no inactivation. After Adams et
-al (1982).
+A slowly activating, non-inactivating potassium current, muscarine-
+sensitive. Modelled after Adams et al (1982).
 
 A similar implentation of this current is that by Doron et al (2017),
 available on ModelDB (#231427). Note, however, that their equations used
@@ -29,7 +29,7 @@ neuromodulation by acetylcholine and dopamine. Eur J Neurosci
 ENDCOMMENT
 
 NEURON {
-    SUFFIX km
+    SUFFIX Im
     USEION k READ ek WRITE ik
     RANGE gbar, g, i
     RANGE damod, maxMod, level, max2, lev2
@@ -88,15 +88,16 @@ DERIVATIVE states {
 FUNCTION minf (Vm (mV)) (1) {
     : After Equation 2 in Adams et al (1982).
     : That equation is:
-    : minf = 1/(1 + exp(z * (v0 - Vm) * F/R/T/1000))
+    : minf = 1/(1 + exp(z * (v0 - Vm) * F/R/T))
     : where 
     :   z = 2.5 (1)
-    :   T = 273.15 + 22(celsius)
     :   v0 = -35 (mV)
+    :   F = 96.480 (kilocoul/mole)
+    :   R = 8.314 (joule/degC)
+    :   T = 273.15 + 22(celsius)
     : In this implementation, I have simplified that equation by
     : reducing all constants to one number, km. Thus, `km` (below) is
-    : 1/(z*F/R/T/1000) (The 1000 is needed because the voltage here is
-    : in mV instead of V.)
+    : 1/(z*F/R/T).
     LOCAL vm, km
     vm = -35 (mV)
     km = 10.17 (mV)
