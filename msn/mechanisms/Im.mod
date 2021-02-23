@@ -29,7 +29,7 @@ neuromodulation by acetylcholine and dopamine. Eur J Neurosci
 ENDCOMMENT
 
 NEURON {
-    SUFFIX Im
+    SUFFIX km
     USEION k READ ek WRITE ik
     RANGE gbar, g, i
     RANGE damod, maxMod, level, max2, lev2
@@ -114,6 +114,7 @@ FUNCTION taum (Vm (mV)) (ms) {
     a = 3.3(/s) * exp((Vm - vtau)/ktau1)
     b = 3.3(/s) * exp((Vm - vtau)/ktau2)
     taum = 1/(a + b) * (1000)
+    taum = taum/tadj
 }
 
 FUNCTION modulation() {
