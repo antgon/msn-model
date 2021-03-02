@@ -9,9 +9,9 @@ available on ModelDB (#231427). Note, however, that their equations used
 to calculate `alpha` and `beta` differ slightly from Equations 5a and 5b
 in Adams et al.
 
-Temperature compensation in this mechanism follows that in Doron's model.
-It also includes a `modulation()` function, from Lindroos and Hellgren
-Kotaleski (2020) (ModelDB #266775), use to simulate dopamine and
+The value of the temperature coefficient Q10 was taken from Doron's
+model. The `modulation()` function is from Lindroos and Hellgren
+Kotaleski (2020) (ModelDB #266775), and is used to simulate dopamine and
 acetylcholine modulation of this mechanism.
 
 References
@@ -50,9 +50,9 @@ PARAMETER {
     max2 = 1
     level = 0
     lev2 = 0
-    q10 = 2.3  : Temperature sensitivity; from Doron's model.
     celsius (degC)
-    temp = 22 (degC)  : Original temperature, from Adams et al (1982).
+    q10 = 2.3
+    q10temp = 22 (degC) : Original temperature, from Adams et al (1982).
 }
 
 ASSIGNED {
@@ -62,16 +62,18 @@ ASSIGNED {
     i (mA/cm2)
     g (S/cm2)
     tadj (1)
+    taum (ms)
+    minf (1)
 }
 
 STATE {
     m (1)
 }
 
-INITIAL {    
-    tadj = q10^((celsius - temp)/(10(degC)))  : Temperature-adjusting
-                                              : factor. From Doron's model.
-    m = minf(v)
+INITIAL {
+    tadj = q10^((celsius - q10temp)/(10(degC))) : Temperature-adjusting factor
+    rates(v)
+    m = minf
 }
 
 BREAKPOINT {
@@ -82,40 +84,32 @@ BREAKPOINT {
 }
 
 DERIVATIVE states {
-    m' = (minf(v) - m) / taum(v)
+    rates(v)
+    m' = (minf - m) / taum
 }
 
-FUNCTION minf (Vm (mV)) (1) {
-    : After Equation 2 in Adams et al (1982).
-    : That equation is:
-    : minf = 1/(1 + exp(z * (v0 - Vm) * F/R/T))
-    : where 
+PROCEDURE rates (Vm (mV)) {
+    : After Equations 4, 5a and 5b in Adams et al (1982). I simplified
+    : those equations by reducing the constants used there to the
+    : parameters `ktau1` and `ktau2`. Thus,
+    :
+    :   ktau1 = 1/((z * F)/(2 * R * T))
+    :   ktau2 = 1/((-z * F)/(2 * R * T))
+    : 
+    : where
     :   z = 2.5 (1)
-    :   v0 = -35 (mV)
     :   F = 96.480 (kilocoul/mole)
     :   R = 8.314 (joule/degC)
-    :   T = 273.15 + 22(celsius)
-    : In this implementation, I have simplified that equation by
-    : reducing all constants to one number, km. Thus, `km` (below) is
-    : 1/(z*F/R/T).
-    LOCAL vm, km
-    vm = -35 (mV)
-    km = 10.17 (mV)
-    minf = 1 / (1 + exp((vm - Vm) / km))
-}
-
-FUNCTION taum (Vm (mV)) (ms) {
-    : After Equations 4, 5a and 5b in Adams et al (1982).
-    : As with `minf`, I reduced the constants in the original equations
-    : to the parameters `ktau1` and `ktau2`.
-    LOCAL vtau, ktau1, ktau2, a, b
+    :   T = 273.15 + 22 (celsius)
+    LOCAL vtau, ktau1, ktau2, alpha, beta
     vtau = -35 (mV)
     ktau1 = 20.3 (mV)
     ktau2 = -20.3 (mV)
-    a = 3.3(/s) * exp((Vm - vtau)/ktau1)
-    b = 3.3(/s) * exp((Vm - vtau)/ktau2)
-    taum = 1/(a + b) * (1000)
+    alpha = 3.3(/s) * exp((Vm - vtau)/ktau1)
+    beta = 3.3(/s) * exp((Vm - vtau)/ktau2)
+    taum = 1/(alpha + beta) * (1000)
     taum = taum/tadj
+    minf = alpha/(alpha + beta)
 }
 
 FUNCTION modulation() {
