@@ -26,7 +26,7 @@ def synaptic_input(section, stype, x=0.5, interval=10, number=10,
     ----------
     section : object
         The cell section that will receive synaptic input.
-    stype : {'gaba', 'glut'}
+    stype : {'gaba', 'ampa', 'nmda'}
         The type of synapse.
     x : float, range [0, 1], default=0.5
         Location on `section` where the synapse will be created.
@@ -76,12 +76,15 @@ def synaptic_input(section, stype, x=0.5, interval=10, number=10,
     documentation.
     """
     # Create the synapse.
-    if stype == 'glut':
-        synapse = h.glutamate(x, sec=section)
+    if stype == 'ampa':
+        synapse = h.ampa(x, sec=section)
+    elif stype == 'nmda':
+        synapse = h.nmda(x, sec=section)
     elif stype == 'gaba':
         synapse = h.gaba(x, sec=section)
     else:
-        raise ValueError("Synapse type `stype` must be 'glut' or 'gaba'")
+        raise ValueError("Synapse type `stype` must be 'ampa', 'nmda' "
+                         "or 'gaba'")
 
     # Create the stimulus (NetStim - spike generator)
     stim = h.NetStim()
@@ -411,16 +414,23 @@ class MSN:
             else:
                 delay = delays[indx]
 
-            # Glut synapse
+            # AMPA synapse
             synapse, netstim, netcon = synaptic_input(
-                sec, stype='glut', x=0.5, interval=1000/glut_freq,
+                sec, stype='ampa', x=0.5, interval=1000/glut_freq,
                 number=1000, start=delay, noise=1, threshold=0.1,
                 delay=0, weight=gbase)
-            synapse.ratio = 1  # AMPA:NMDA ratio
+            synapse.ampa_nmda_ratio = 1
             if ampa_scale_factor:
-                synapse.ampa_scale_factor = ampa_scale_factor
+                synapse.scale_factor = ampa_scale_factor
+            self._bg_noise.append([synapse, netstim, netcon])
+
+            # NMDA synapse
+            synapse, netstim, netcon = synaptic_input(
+                sec, stype='nmda', x=0.5, interval=1000/glut_freq,
+                number=1000, start=delay, noise=1, threshold=0.1,
+                delay=0, weight=gbase)
             if nmda_scale_factor:
-                synapse.nmda_scale_factor = nmda_scale_factor
+                synapse.scale_factor = nmda_scale_factor
             self._bg_noise.append([synapse, netstim, netcon])
 
             # GABA synapse

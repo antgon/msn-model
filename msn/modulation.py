@@ -270,19 +270,24 @@ class Dopamine:
 
     def _modulate_glut(self, segment, reset=False):
         for syn in segment.point_processes():
-            if 'glut' in syn.hname():
+            if 'ampa' in syn.hname():
                 syn.damod = 1
-                syn.maxModNMDA = self.params['synaptic']['NMDA']
-                syn.maxModAMPA = self.params['synaptic']['AMPA']
+                syn.maxMod = self.params['synaptic']['AMPA']
                 if reset is True:
-                    syn.l1AMPA = 0
-                    syn.l1NMDA = 0
+                    syn.level = 0
                 elif len(self.play) and 'glut' in self.play:
-                    self.play['glut'].play(syn._ref_l1NMDA, self.dt)
-                    self.play['glut'].play(syn._ref_l1AMPA, self.dt)
+                    self.play['glut'].play(syn._ref_level, self.dt)
                 else:
-                    syn.l1AMPA = 1
-                    syn.l1NMDA = 1
+                    syn.level = 1
+            elif 'nmda' in syn.hname():
+                syn.damod = 1
+                syn.maxMod = self.params['synaptic']['NMDA']
+                if reset is True:
+                    syn.level = 0
+                elif len(self.play) and 'glut' in self.play:
+                    self.play['glut'].play(syn._ref_level, self.dt)
+                else:
+                    syn.level = 1
 
     def reset(self):
         if len(self.play):
@@ -463,20 +468,26 @@ class Acetylcholine:
 
     def _modulate_glut(self, seg, reset=False):
         for syn in seg.point_processes():
-            if 'glut' in syn.hname():
+            if 'ampa' in syn.hname():
                 syn.damod = 1
-                syn.max2NMDA = self.params['synaptic']['NMDA']
-                syn.max2AMPA = self.params['synaptic']['AMPA']
+                syn.max2 = self.params['synaptic']['AMPA']
                 if reset is True:
                     syn.damod = 0
-                    syn.l2AMPA = 0
-                    syn.l2NMDA = 0
+                    syn.lev2 = 0
                 elif len(self.play) and 'glut' in self.play:
-                    self.play['glut'].play(syn._ref_l2NMDA, self.dt)
-                    self.play['glut'].play(syn._ref_l2AMPA, self.dt)
+                    self.play['glut'].play(syn._ref_lev2, self.dt)
                 else:
-                    syn.l2AMPA = 1
-                    syn.l2NMDA = 1
+                    syn.lev2 = 1
+            elif 'nmda' in syn.hname():
+                syn.damod = 1
+                syn.max2 = self.params['synaptic']['NMDA']
+                if reset is True:
+                    syn.damod = 0
+                    syn.lev2 = 0
+                elif len(self.play) and 'glut' in self.play:
+                    self.play['glut'].play(syn._ref_lev2, self.dt)
+                else:
+                    syn.lev2 = 1
 
     def reset(self, what='all'):
         """
