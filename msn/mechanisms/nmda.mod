@@ -18,6 +18,7 @@ NEURON {
     USEION cal WRITE ical VALENCE 2
     RANGE e, g, i
     RANGE damod, maxMod, level, max2, lev2
+    RANGE scale_factor
     NONSPECIFIC_CURRENT i
 }
 
