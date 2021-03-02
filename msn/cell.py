@@ -174,7 +174,7 @@ def get_channel_density(distance, params):
         else:
             density = uniform_fun(distance, args, gbar)
     elif compartment == 'axon':
-        if (mech == 'kas') or (mech == 'Im'):
+        if (mech == 'kas') or (mech == 'km'):
             density = uniform_fun(distance, args, gbar)
         elif mech == 'naf':
             density = step_fun(distance, args, gbar)
@@ -291,7 +291,7 @@ class MSN:
         somatic_channels = (['naf', 'kaf', 'kas', 'kdr', 'bk', 'cal12',
                              'cal13', 'car', 'can', 'sk', 'kir'] +
                             ['cadyn', 'caldyn'])
-        axonal_channels = ['naf', 'kas', 'Im']
+        axonal_channels = ['naf', 'kas', 'km']
 
         for sec in self.all:
             if 'soma' in sec.name():

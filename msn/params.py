@@ -221,7 +221,7 @@ class ModelParameters:
         params += [
                 ['axon', 'kas', [0]],
                 ['axon', 'naf', [1, 1.1, 30, 500]],
-                ['axon', 'Im', [0]]]
+                ['axon', 'km', [0]]]
 
         # Now append the value of gbar (or pbar) to each line.
         conductances = self.get_gbar(cell_type)

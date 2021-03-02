@@ -4,7 +4,7 @@ Dopaminergic and cholinergic modulation of medium spiny neurones (MSNs).
 Dopamine (DA) and acetylcholine (ACh) affect the activity of MSNs by
 modulating several ion currents and synaptic mechanisms: thus, DA
 decreases Naf, Kas and CaN, and increases Kir and CaL (Lindroos2018 [1]
-Table 3), whereas ACh affects Kaf, Kir, Im, Naf CaN, CaL (Lindroos2020
+Table 3), whereas ACh affects Kaf, Kir, Km, Naf CaN, CaL (Lindroos2020
 [2]). Both also modulate glutamate and GABA receptors.
 
 The functions and classes here implement these modulatory effects, which
@@ -93,7 +93,7 @@ def get_modulation_params(cell_type, neurotransmitter):
                     'cal12': rand_uniform(0.3, 0.7),
                     'cal13': rand_uniform(0.3, 0.7),
                     'can': rand_uniform(0.65, 0.85),
-                    'Im': rand_uniform(0, 0.4)},
+                    'km': rand_uniform(0, 0.4)},
                 'synaptic': {
                     'NMDA': rand_uniform(1, 1.05),
                     'AMPA': rand_uniform(0.99, 1.01),
@@ -125,7 +125,7 @@ def get_modulation_params(cell_type, neurotransmitter):
                     'cal12': rand_uniform(0.3, 0.7),
                     'cal13': rand_uniform(0.3, 0.7),
                     'can': rand_uniform(0.65, 0.85),
-                    'Im': rand_uniform(0, 0.4)},
+                    'km': rand_uniform(0, 0.4)},
                 'synaptic': {
                     # There are no values for cholinergic modulation of
                     # synaptic channels in dMSNs in Table 3
@@ -299,7 +299,7 @@ class Acetylcholine:
     """
     Acetylcholine (ACh) modulation of a model neuron.
 
-    ACh in MSN modulates Naf, Kir, CaL, CaN, Kaf and Im currents.  Here,
+    ACh in MSN modulates Naf, Kir, CaL, CaN, Kaf and Km currents.  Here,
     these currents are modified to simulate ACh action. (Kaf  modulation
     is simulated not by changing conductance parameters but by shifting
     membrane potential.)
