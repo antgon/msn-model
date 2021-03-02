@@ -29,7 +29,7 @@ neuromodulation by acetylcholine and dopamine. Eur J Neurosci
 ENDCOMMENT
 
 NEURON {
-    SUFFIX Im
+    SUFFIX km
     USEION k READ ek WRITE ik
     RANGE gbar, g, i
     RANGE damod, maxMod, level, max2, lev2
