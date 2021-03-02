@@ -20,7 +20,7 @@ Note the `ampa_nmda_ratio parameter`: it modifies synaptic strength
 to NMDA. Think about this. Why is this the best way to model
 AMPA:NMDA ratio?
 
-(2020) Antonio Gonzalez
+(2021) Antonio Gonzalez
 ENDCOMMENT
 
 NEURON {

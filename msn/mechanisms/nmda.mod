@@ -10,7 +10,7 @@ This mechanism contributes (with AMPA) to ical.
 
 NOTE: The original glutamate.mod file fails modlunit.
 
-(2020) Antonio Gonzalez
+(2021) Antonio Gonzalez
 ENDCOMMENT
 
 NEURON {

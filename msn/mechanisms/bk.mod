@@ -6,7 +6,7 @@ Lindroos's original bk.mod mechanism.
 
 This mechanism is not modulated by DA or ACh so lacks that function.
 
-(2020) Antonio Gonzalez
+(2021) Antonio Gonzalez
 ENDCOMMENT
 
 NEURON {

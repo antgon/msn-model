@@ -6,7 +6,7 @@ and `modulation()` function taken from Lindross's `gaba.mod` (ModelDB
 #266775). That function allows to simulate dopamine and acetylcholine
 modulation of this mechanism's conductance.
 
-(2020) Antonio Gonzalez
+(2021) Antonio Gonzalez
 ENDCOMMENT
 
 NEURON {
