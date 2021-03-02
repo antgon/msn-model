@@ -216,7 +216,7 @@ class ModelParameters:
             args = density_params[mech]
             params.append(['soma', mech, args])
 
-        # Axon. These take default arguments hardoced in the original
+        # Axon. These take default arguments hardcoded in the original
         # MSN_build.py file.
         params += [
                 ['axon', 'kas', [0]],
