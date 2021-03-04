@@ -65,16 +65,24 @@ def run(cell, dend_num, tstop=350):
     settle_time = 50  # in ms
     start_time = settle_time + 20  # in ms
 
+    connections = []
+
     # In Lindroos and Hellgren Kotaleski (2020), Section 2.6, the
     # synaptic conductances used to model dendritic plateaus are:
     #   NMDA, 1500 pS = 1.5e-3 uS
     #   AMPA, 500 pS = 5e-4 uS
+    # (This implies an AMPA:NMDA ratio of 1/3.)
     # They also use an interval of 1 ms and 16 spikes in their model.
     # That is where these parameters come from.
-    synapse, netstim, netcon = synaptic_input(
-        section=dend, stype='glut', x=0.5, interval=1, number=16,
+    ampa_synapse, __, netcon1 = synaptic_input(
+        section=dend, stype='ampa', x=0.5, interval=1, number=16,
+        start=start_time, noise=0, delay=0, weight=5e-4)
+    connections.append(netcon1)
+
+    nmda_synapse, __, netcon2 = synaptic_input(
+        section=dend, stype='nmda', x=0.5, interval=1, number=16,
         start=start_time, noise=0, delay=0, weight=1.5e-3)
-    synapse.ratio = 1/3  # AMPA:NMDA ratio
+    connections.append(netcon2)
 
     # Run the simulation.
     h.finitialize(cell.v_init)
@@ -93,10 +101,11 @@ def run(cell, dend_num, tstop=350):
     lbl = f'{dend_name}, distance={somatic_distance:.0f}'
     plt.plot(x, y, label=lbl)
 
-    # Set the connection weight to 0 to inactivate this synapse. This
-    # has to be done before the next one is added or else the synapses
+    # Set connection weight to 0 to inactivate these synapses. This has
+    # to be done before the next one is added or else the synapses
     # build up.
-    netcon.weight[0] = 0
+    for netcon in connections:
+        netcon.weight[0] = 0
 
 
 # Run the simulation as many times as there are dendrites to receive a
