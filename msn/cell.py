@@ -400,6 +400,8 @@ class MSN:
         # NMDA, 300 pS = 3e-4 uS
         # GABA, 900 pS = 9e-4 uS
         #
+        # (This implies an AMPA:NMDA ratio of 1.)
+        #
         # It is not clear there whether these values apply to both dMSN
         # and iMSN or not but they have separate default values in
         # their function `set_bg_noise()`:
@@ -419,7 +421,6 @@ class MSN:
                 sec, stype='ampa', x=0.5, interval=1000/glut_freq,
                 number=1000, start=delay, noise=1, threshold=0.1,
                 delay=0, weight=gbase)
-            synapse.ampa_nmda_ratio = 1
             if ampa_scale_factor:
                 synapse.scale_factor = ampa_scale_factor
             self._bg_noise.append([synapse, netstim, netcon])

@@ -15,11 +15,6 @@ Looking at all the .mod files, Ca++ currents are contributed by:
 - ical: CaL (cal12, cal13) and CaT (cav32, cav33)
 - ica: CaN (can), CaR (car)
 
-Note the `ampa_nmda_ratio parameter`: it modifies synaptic strength
-(implemented in NET_RECEIVE) by scaling synaptic weight in relation
-to NMDA. Think about this. Why is this the best way to model
-AMPA:NMDA ratio?
-
 (2021) Antonio Gonzalez
 ENDCOMMENT
 
@@ -28,7 +23,7 @@ NEURON {
     USEION cal WRITE ical VALENCE 2
     RANGE e, g, i
     RANGE damod, maxMod, level, max2, lev2
-    RANGE scale_factor, ampa_nmda_ratio
+    RANGE scale_factor
     NONSPECIFIC_CURRENT i
 }
 
@@ -53,11 +48,7 @@ PARAMETER {
     scale_factor = 1 : Scales the total current.
 
     ca_frac = 0.005 : Fraction of current across AMPA that is carried by
-                    : Ca++.    
-    
-    ampa_nmda_ratio = 1 : Scales AMPA input strength in relation to NMDA
-                        : (This applies to NET_RECEIVE; `scale_factor`
-                        : above applies to the current magnitude.)
+                    : Ca++.
 }
 
 ASSIGNED {
@@ -97,8 +88,8 @@ DERIVATIVE states {
 }
 
 NET_RECEIVE(weight (uS)) {
-	a = a + weight * factor * ampa_nmda_ratio
-	b = b + weight * factor * ampa_nmda_ratio
+	a = a + weight * factor
+	b = b + weight * factor
 }
 
 : In the original function (in glutamate.mod) the modulation
