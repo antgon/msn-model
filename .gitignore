@@ -3,6 +3,7 @@ __pycache__
 *.swp
 .vscode
 x86_64
+venv
 
 # Docs builds
 docs/_build/
