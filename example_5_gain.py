@@ -33,7 +33,7 @@ from msn.instrumentation import Stim, ActionPotentials
 # in ms.
 stim_duration = 250
 stim_delay = 50
-stim_amplitudes = np.arange(0.3, 0.8, 0.1)
+stim_amplitudes = np.arange(0.4, 0.8, 0.1)
 cell_type = 'dmsn'
 cell_index = 3
 
