@@ -10,7 +10,7 @@ functions are based on code made available online [on
 GitHub](https://github.com/robban80/striatal_SPN_lib) by the same
 authors and also on their previous work [Lindroos2018].
 
-(C) 2021 [Antonio González](mailto:antgon@cantab.net)
+(C) 2021-2022 [Antonio González](mailto:antgon@cantab.net)
 
 ## Requirements
 

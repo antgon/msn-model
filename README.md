@@ -9,7 +9,7 @@ understanding of the various steps involved in building and manipulating
 a neuron model. After studying each example it should be possible to
 combine these to simulate experiments and assess specific hypotheses.
 
-2021 [Antonio González](mailto:antgon@cantab.net)
+2021-2022 [Antonio González](mailto:antgon@cantab.net)
 
 ## Credits
 
@@ -30,12 +30,14 @@ the documentation in the individual files acknowledges this fact.
 * [Pandas](https://pandas.pydata.org/)
 * [Matplotlib](https://matplotlib.org/)
 * [NEURON]
+* [scikit-learn](https://scikit-learn.org/stable/index.html) (optional:
+  needed only for some of the examples provided)
 
 ## How to use it
 
 1. Install NEURON with Python; refer to [NEURON]'s website for details.
-2. Run `nrnivmodl` inside the directory `msn/mechanisms` to compile the .mod
-   files; see [NEURON]'s website.
+2. Run `nrnivmodl` inside the directory `msn/mechanisms` to compile the
+   .mod files; see [NEURON]'s website.
 3. Run the example scripts provided (e.g. `python example_1_build.py`).
    These files should be self explanatory.
 
