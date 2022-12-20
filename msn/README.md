@@ -4,7 +4,7 @@ A library for modelling striatial medium spiny neurons (MSNs).
 
 The original NEURON model (mechanisms/\*.mod), cell morphologies
 (morphologies/\*.swc), and best-fit parameters (parameters/\*.pkl) are
-from Lindroos and Hellgren Kotaleski [Lindroos2020], available from
+from Lindroos and Hellgren Kotaleski [Lindroos2021], available from
 ModelDB [(model 266775)](http://modeldb.yale.edu/266775). Several Python
 functions are based on code made available online [on
 GitHub](https://github.com/robban80/striatal_SPN_lib) by the same
@@ -30,7 +30,7 @@ of direct pathway MSNs investigate the fast onset of dopaminergic
 effects and predict the role of Kv4.2. Front Neural Circuits 12, 3
 (https://doi.org/10.3389/fncir.2018.00003).
 
-[Lindroos2020]: Lindroos R & Hellgren Kotaleski J (2020). Predicting
+[Lindroos2021]: Lindroos R & Hellgren Kotaleski J (2021). Predicting
 complex spikes in striatal projection neurons of the direct pathway
 following neuromodulation by acetylcholine and dopamine. Eur J Neurosci
-(https://doi.org/10.1111/ejn.14891).
+53, 2117–2134 (https://doi.org/10.1111/ejn.14891).

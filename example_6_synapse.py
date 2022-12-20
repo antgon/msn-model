@@ -11,7 +11,7 @@ close to the soma, then to another dendrite further from the soma, and
 finally to a third dendrite even further away. The resulting
 post-synaptic potentials are plotted together for comparison: the
 further from the soma the wider the potential, similar to Figure 2(a)
-and 2(b) in Lindroos and Hellgren Kotaleski (2020).
+and 2(b) in Lindroos and Hellgren Kotaleski (2021).
 
 author: Antonio Gonzalez
 """

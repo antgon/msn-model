@@ -4,12 +4,12 @@ Dopaminergic and cholinergic modulation of medium spiny neurones (MSNs).
 Dopamine (DA) and acetylcholine (ACh) affect the activity of MSNs by
 modulating several ion currents and synaptic mechanisms: thus, DA
 decreases Naf, Kas and CaN, and increases Kir and CaL (Lindroos2018 [1]
-Table 3), whereas ACh affects Kaf, Kir, Km, Naf CaN, CaL (Lindroos2020
+Table 3), whereas ACh affects Kaf, Kir, Km, Naf CaN, CaL (Lindroos2021
 [2]). Both also modulate glutamate and GABA receptors.
 
 The functions and classes here implement these modulatory effects, which
 are effectively changes in conductance, as described in those two
-papers, and are based on the files made available by Lindroos2020 [2]
+papers, and are based on the files made available by Lindroos2021 [2]
 on GitHub [3].
 
 References
@@ -21,10 +21,10 @@ neuromodulation over multiple temporal and structural scales-simulations
 of direct pathway MSNs investigate the fast onset of dopaminergic
 effects and predict the role of Kv4.2. Front Neural Circuits 12, 3.
 
-[2]: Lindroos R & Hellgren Kotaleski J (2020). Predicting complex
-spikes in striatal projection neurons of the direct pathway following
-neuromodulation by acetylcholine and dopamine. Eur J Neurosci; DOI:
-10.1111/ejn.14891.
+[2]: Lindroos R & Hellgren Kotaleski J (2021). Predicting complex spikes
+in striatal projection neurons of the direct pathway following
+neuromodulation by acetylcholine and dopamine. Eur J Neurosci 53,
+2117–2134 (https://doi.org/10.1111/ejn.14891).
 
 [3]: https://github.com/robban80/striatal_SPN_lib
 

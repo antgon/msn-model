@@ -56,9 +56,9 @@ class ModelParameters:
         - Density parameters. Ion channel densities in the MSN model are
           a function of somatic distance and are calculated according to
           sigmodial, linear, or exponential functions; see
-          [Lindroos2020] for details. Lindroos et al. provide density
+          [Lindroos2021] for details. Lindroos et al. provide density
           distribution parameters (named p0, p1, p2, and p3 in Table 1,
-          [Lindroos2020]) to model 71 different dMSNs and 34 different
+          [Lindroos2021]) to model 71 different dMSNs and 34 different
           iMSNs. These parameters are contained in the `variables`
           subset in the pickled files `D1_71bestFit_updRheob.pkl` and
           `D2_34bestFit_updRheob.pkl`.
@@ -87,10 +87,11 @@ class ModelParameters:
     of dopaminergic effects and predict the role of Kv4.2. Front Neural
     Circuits 12, 3.
 
-    [Lindroos2020]: Lindroos R & Hellgren Kotaleski J (2020). Predicting
+    [Lindroos2021]: Lindroos R & Hellgren Kotaleski J (2021). Predicting
     complex spikes in striatal projection neurons of the direct pathway
     following neuromodulation by acetylcholine and dopamine. Eur J
-    Neurosci; DOI: 10.1111/ejn.14891.
+    Neurosci 53, 2117–2134 (https://doi.org/10.1111/ejn.14891).
+
     """
 
     def __init__(self):
@@ -182,7 +183,7 @@ class ModelParameters:
                 E.g. 'naf', 'kir', etc.
             args : list
                 A list with one to four elements, referred as p0, p1,
-                p2, p3 in Table 1 in Lindroos2020, used to calculate
+                p2, p3 in Table 1 in Lindroos2021, used to calculate
                 ion channel density.
             gbar : numeric
                 The value of gbar (or pbar)
