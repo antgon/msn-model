@@ -16,14 +16,13 @@ and 2(b) in Lindroos and Hellgren Kotaleski (2021).
 author: Antonio Gonzalez
 """
 
-import numpy as np
 from neuron import h
 import matplotlib.pyplot as plt
-from msn.cell import MSN
-from msn.cell import synaptic_input
+from msnmodel.cell import MSN
+from msnmodel.cell import synaptic_input
 
 # Make a MSN
-cell_type = 'dmsn'
+cell_type = "dmsn"
 cell_index = 13
 cell = MSN(cell_type, cell_index)
 # cell.add_bg_noise(gaba_freq=24, glut_freq=12)
@@ -51,7 +50,7 @@ def run(cell, dend_num, tstop=350):
 
     # Loop along all cell sections and stop as soon as the dendrite we
     # want is found.
-    dend_name = f'dend[{dend_num}]'
+    dend_name = f"dend[{dend_num}]"
     for dend in cell.dend:
         if dend_name in dend.name():
             break
@@ -75,13 +74,29 @@ def run(cell, dend_num, tstop=350):
     # They also use an interval of 1 ms and 16 spikes in their model.
     # That is where these parameters come from.
     ampa_synapse, __, netcon1 = synaptic_input(
-        section=dend, stype='ampa', x=0.5, interval=1, number=16,
-        start=start_time, noise=0, delay=0, weight=5e-4)
+        section=dend,
+        stype="ampa",
+        x=0.5,
+        interval=1,
+        number=16,
+        start=start_time,
+        noise=0,
+        delay=0,
+        weight=5e-4,
+    )
     connections.append(netcon1)
 
     nmda_synapse, __, netcon2 = synaptic_input(
-        section=dend, stype='nmda', x=0.5, interval=1, number=16,
-        start=start_time, noise=0, delay=0, weight=1.5e-3)
+        section=dend,
+        stype="nmda",
+        x=0.5,
+        interval=1,
+        number=16,
+        start=start_time,
+        noise=0,
+        delay=0,
+        weight=1.5e-3,
+    )
     connections.append(netcon2)
 
     # Run the simulation.
@@ -98,7 +113,7 @@ def run(cell, dend_num, tstop=350):
     x -= start_time
 
     # Plot the data, adding somatic distance to the label.
-    lbl = f'{dend_name}, distance={somatic_distance:.0f}'
+    lbl = f"{dend_name}, distance={somatic_distance:.0f}"
     plt.plot(x, y, label=lbl)
 
     # Set connection weight to 0 to inactivate these synapses. This has
@@ -114,9 +129,9 @@ for dend_num in dendrites:
     run(cell, dend_num)
 
 # Label the plot and display.
-plt.title(f'{cell_type} #{cell_index}')
-plt.xlabel('Time (ms)')
-plt.ylabel('Membrane potential (mV)')
+plt.title(f"{cell_type} #{cell_index}")
+plt.xlabel("Time (ms)")
+plt.ylabel("Membrane potential (mV)")
 
 plt.legend()
 plt.show()

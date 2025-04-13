@@ -1,9 +1,17 @@
-__pycache__
-*.pyc
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Neuron compiled mechanisms
+x86_64
+
+# Other
 *.swp
 .vscode
-x86_64
-venv
-
-# Docs builds
-docs/_build/

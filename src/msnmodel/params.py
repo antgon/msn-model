@@ -7,7 +7,7 @@ author: Antonio Gonzalez
 import numpy as np
 import pandas as pd
 
-from . import paths
+from . import files
 
 
 class ModelParameters:
@@ -97,8 +97,9 @@ class ModelParameters:
     def __init__(self):
         # Load channel density parameters.
         self._params = {}
-        for cell_type, path in paths['parameters'].items():
-            params = pd.read_pickle(path)
+   
+        for cell_type, fname in files['params'].items():
+            params = pd.read_pickle(fname)
             self._params[cell_type] = {}
             for key, val in params.items():
                 self._params[cell_type][key] = {}
@@ -115,8 +116,10 @@ class ModelParameters:
                 self._params[cell_type][key]['density_params'] = these_params
 
         # Load conductances.
-        self._conductances = pd.read_csv(paths['conductances'],
-                                         delimiter='\t', comment='#')
+        self._conductances = pd.read_csv(files['conductances'],
+                                         comment='#')
+        # self._conductances = pd.read_csv(paths['conductances'],
+                                        #  delimiter='\t', comment='#')
 
     def get_rheobase(self, cell_type, cell_index):
         """
@@ -139,23 +142,23 @@ class ModelParameters:
         rheobase = self._params[cell_type][cell_index]['rheobase']
         return rheobase
 
-    def get_morphology_path(self, cell_type):
-        """
-        Returns the path to the morphology (SWC) file for the given
-        cell type.
+    # def get_morphology_path(self, cell_type):
+        # """
+        # Returns the path to the morphology (SWC) file for the given
+        # cell type.
 
-        Input
-        -----
-        cell_type : str
-            One of 'dmsn' or 'imsn'
+        # Input
+        # -----
+        # cell_type : str
+        #     One of 'dmsn' or 'imsn'
 
-        Returns
-        -------
-        morph : str
-            The path to the SWC file.
-        """
-        morph = str(paths['morphologies'][cell_type])
-        return morph
+        # Returns
+        # -------
+        # morph : str
+        #     The path to the SWC file.
+        # """
+        # morph = str(paths['morphologies'][cell_type])
+        # return morph
 
     def get_density_params(self, cell_type, cell_index):
         """

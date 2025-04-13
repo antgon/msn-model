@@ -9,34 +9,31 @@ understanding of the various steps involved in building and manipulating
 a neuron model. After studying each example it should be possible to
 combine these to simulate experiments and assess specific hypotheses.
 
-2021-2022 [Antonio González](mailto:antgon@cantab.net)
+2021-2025 [Antonio González](mailto:antgon@cantab.net)
 
 ## Credits
 
-The original NEURON model (msn/mechanisms/\*.mod), cell morphologies
-(msn/morphologies/\*.swc), and best-fit parameters
-(msn/parameters/\*.pkl) are from Lindroos and Hellgren Kotaleski
-[Lindroos2021], available from ModelDB ([model ID
-266775](http://modeldb.yale.edu/266775)). See also [Lindroos2018]. Some
-of the Python code used to simulate MSNs is derived from code by the
-same authors available [on
+The original NEURON model (`mechanisms/\*.mod`), cell morphologies
+(`morphology/\*.swc`), and best-fit parameters (`parameters/\*.pkl`) are
+from Lindroos and Hellgren Kotaleski [Lindroos2021], available from
+ModelDB ([model ID 266775](http://modeldb.yale.edu/266775)). See also
+[Lindroos2018]. Some of the Python code used to simulate MSNs is derived
+from code by the same authors available [on
 GitHub](https://github.com/robban80/striatal_SPN_lib); where applicable,
 the documentation in the individual files acknowledges this fact.
 
 ## Requirements
 
-* [Python 3 (>= 3.7)](https://www.python.org/)
+* [Python 3 (>= 3.12)](https://www.python.org/)
 * [Numpy](http://www.numpy.org/)
 * [Pandas](https://pandas.pydata.org/)
 * [Matplotlib](https://matplotlib.org/)
-* [NEURON]
-* [scikit-learn](https://scikit-learn.org/stable/index.html) (optional:
-  needed only for some of the examples provided)
+* [NEURON (>= 8.2.6)](https://www.neuron.yale.edu/)
 
 ## How to use it
 
 1. Install NEURON with Python; refer to [NEURON]'s website for details.
-2. Run `nrnivmodl` inside the directory `msn/mechanisms` to compile the
+2. Run `nrnivmodl` inside the directory `mechanisms` to compile the
    .mod files; see [NEURON]'s website.
 3. Run the example scripts provided (e.g. `python example_1_build.py`).
    These files should be self explanatory.

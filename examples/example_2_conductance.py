@@ -11,14 +11,14 @@ compare the effect of `kaf` on cell activity.
 
 A Gonzalez
 """
-import numpy as np
+
 import matplotlib.pyplot as plt
 
-from msn.cell import MSN
-from msn.instrumentation import Stim
+from msnmodel.cell import MSN
+from msnmodel.instrumentation import Stim
 
 # Make a MSN.
-cell_type = 'dmsn'
+cell_type = "dmsn"
 cell_index = 20
 cell = MSN(cell_type, cell_index)
 
@@ -35,13 +35,13 @@ ax = plt.figure().add_subplot(111)
 for gmax in (1, 1.2):
     for section in cell.all:
         for segment in section:
-            if hasattr(segment, 'kaf'):
+            if hasattr(segment, "kaf"):
                 segment.kaf.gbar *= gmax
     stim.run()
 
     # Plot the results
-    stim.plot(ax=ax, label=f'kaf {gmax:.0%}')
+    stim.plot(ax=ax, label=f"kaf {gmax:.0%}")
 
 # Add a title and display
-ax.set_title('{} #{}'.format(cell_type, cell_index))
+ax.set_title("{} #{}".format(cell_type, cell_index))
 plt.show()

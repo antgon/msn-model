@@ -4,17 +4,15 @@ Build a model of a medium spiny neuron (MSN).
 author: Antonio Gonzalez
 """
 import numpy as np
-import pandas as pd
 import neuron as nrn
 from neuron import h
-import matplotlib.pyplot as plt
 
-from . import paths
 from .params import ModelParameters
+from . import files
 
 h.load_file('stdrun.hoc')
 h.load_file('import3d.hoc')
-nrn.load_mechanisms(paths['mechanisms'])
+nrn.load_mechanisms(files['mechanisms'])
 
 
 def synaptic_input(section, stype, x=0.5, interval=10, number=10,
@@ -246,7 +244,7 @@ class MSN:
         params = ModelParameters()
         self.density_params = params.get_density_params(cell_type, cell_index)
         self.rheobase = params.get_rheobase(cell_type, cell_index)
-        self._morphology_file = params.get_morphology_path(cell_type)
+        self._morphology_file = files['morphology'][cell_type]
         gbar_pas = params.get_gbar(cell_type)
         self._gbar_pas = gbar_pas.value[gbar_pas.mechanism == 'pas'].values[0]
 
@@ -264,7 +262,7 @@ class MSN:
     def _setup_morphology(self):
         # Import morphology from SWC file.
         cell = h.Import3d_SWC_read()
-        cell.input(self._morphology_file)
+        cell.input(str(self._morphology_file))
         i3d = h.Import3d_GUI(cell, 0)
         i3d.instantiate(self)
         # h.define_shape() # Is this needed? This line is in the
